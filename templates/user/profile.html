@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+     <h2 class="fw-bold mb-4">
+    <i class="fa-solid fa-circle-user me-2"></i>My Profile
+</h2>
+
+      <!-- Profile info card -->
+      <div class="card-ecobuild p-4 mb-4">
+        <h5 class="fw-bold mb-3">Account Information</h5>
+
+        <!-- Edit name form -->
+        <form method="POST" action="{{ url_for('user.profile') }}" novalidate>
+          {{ form.hidden_tag() }}
+          <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+            {% for err in form.name.errors %}
+              <div class="invalid-feedback">{{ err }}</div>
+            {% endfor %}
+          </div>
+          {{ form.submit(class="btn btn-primary-ecobuild") }}
+        </form>
+
+        <hr class="my-4">
+
+        <!-- Read-only metadata -->
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Email</span>
+          <span>{{ current_user.email }}</span>
+        </div>
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Role</span>
+          <span>
+            {% if current_user.is_admin %}
+              <span class="badge bg-danger">Admin</span>
+            {% else %}
+              <span class="badge" style="background:var(--blue);">User</span>
+            {% endif %}
+          </span>
+        </div>
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Account Created</span>
+          <span>{{ current_user.created_at.strftime('%d %b %Y, %H:%M') if current_user.created_at else '—' }}</span>
+        </div>
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Last Login</span>
+          <span>{{ current_user.last_login.strftime('%d %b %Y, %H:%M') if current_user.last_login else 'N/A' }}</span>
+        </div>
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Total Analyses</span>
+          <span>{{ analyses_count }}</span>
+        </div>
+        <div class="profile-meta-item">
+          <span class="profile-meta-label">Total Scenarios</span>
+          <span>{{ scenarios_count }}</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-3 flex-wrap">
+        <a href="{{ url_for('user.change_password') }}"
+           class="btn btn-outline-ecobuild">Change Password</a>
+        <a href="{{ url_for('auth.logout') }}"
+           class="btn btn-outline-secondary">Logout</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

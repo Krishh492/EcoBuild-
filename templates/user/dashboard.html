@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- Header -->
+<div class="dashboard-header">
+  <div class="container">
+    <h2 class="fw-bold mb-1">Welcome, {{ current_user.name }}</h2>
+    <p class="mb-0" style="opacity:0.8;">
+      Here's an overview of your EcoBuild activity.
+    </p>
+  </div>
+</div>
+
+<div class="container py-4">
+
+  <!-- Stats -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-value">{{ analyses_count }}</div>
+        <div class="stat-label">Total Analyses</div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-value">{{ scenarios_count }}</div>
+        <div class="stat-label">What-If Scenarios</div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-value">
+          {% if latest and latest.predicted_heating_load is not none %}
+            {{ "%.2f"|format(latest.predicted_heating_load) }}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        <div class="stat-label">Latest Heating Load</div>
+      </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+      <div class="stat-card">
+        <div class="stat-value">
+          {% if latest and latest.predicted_cooling_load is not none %}
+            {{ "%.2f"|format(latest.predicted_cooling_load) }}
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        <div class="stat-label">Latest Cooling Load</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- State messages when no data yet -->
+  {% if analyses_count == 0 %}
+    <div class="alert alert-info">
+      No analyses yet. Use <strong>Analyze Building</strong> to get started.
+    </div>
+  {% endif %}
+  {% if scenarios_count == 0 %}
+    <div class="alert alert-info">
+      No What-If scenarios yet. Run an analysis first, then create scenarios.
+    </div>
+  {% endif %}
+
+  <!-- Quick actions -->
+  <h5 class="fw-bold mb-3">Quick Actions</h5>
+  <div class="row g-3 mb-4">
+    <div class="col-sm-4">
+      <a href="{{ url_for('user.analyze') }}" class="quick-action-card">
+        <div class="quick-action-icon"><i class="fa-solid fa-building"></i></div>
+        <div class="fw-semibold">Analyze Building</div>
+        <small class="text-muted">Predict heating & cooling loads</small>
+      </a>
+    </div>
+    <div class="col-sm-4">
+      <a href="{{ url_for('user.what_if') }}" class="quick-action-card">
+        <div class="quick-action-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <div class="fw-semibold">What-If Analysis</div>
+        <small class="text-muted">Compare building scenarios</small>
+      </a>
+    </div>
+    <div class="col-sm-4">
+      <a href="{{ url_for('user.history') }}" class="quick-action-card">
+        <div class="quick-action-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+        <div class="fw-semibold">View History</div>
+        <small class="text-muted">All saved analyses</small>
+      </a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

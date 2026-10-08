@@ -1,0 +1,14 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+Flask-WTF
+Flask-Migrate
+Werkzeug
+pandas
+numpy
+scikit-learn
+joblib
+psycopg[binary]
+gunicorn
+python-dotenv
+email-validator

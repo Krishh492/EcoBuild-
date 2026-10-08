@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block title %}My History{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+  <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-2">
+   <div>
+    <h2 class="fw-bold mb-1">
+        <i class="fa-solid fa-clock-rotate-left me-2"></i>My History
+    </h2>
+
+    <p class="text-muted mb-0">
+        All your saved analyses and What-If scenarios.
+    </p>
+
+    </div>
+    <div class="d-flex gap-2">
+      <a href="{{ url_for('user.history', type='all') }}"
+         class="btn btn-sm {% if filter_type == 'all' %}btn-primary-ecobuild{% else %}btn-outline-ecobuild{% endif %}">
+        All
+      </a>
+      <a href="{{ url_for('user.history', type='analyses') }}"
+         class="btn btn-sm {% if filter_type == 'analyses' %}btn-primary-ecobuild{% else %}btn-outline-ecobuild{% endif %}">
+        Analyses
+      </a>
+      <a href="{{ url_for('user.history', type='scenarios') }}"
+         class="btn btn-sm {% if filter_type == 'scenarios' %}btn-primary-ecobuild{% else %}btn-outline-ecobuild{% endif %}">
+        Scenarios
+      </a>
+    </div>
+  </div>
+
+  {% if not analyses and not scenarios %}
+    <div class="alert alert-info">
+      No records found.
+      <a href="{{ url_for('user.analyze') }}" class="alert-link">Run your first analysis</a>
+      to get started.
+    </div>
+  {% endif %}
+
+  {% if analyses %}
+  <h5 class="fw-bold mb-3">Building Analyses ({{ analyses|length }})</h5>
+  <div class="card-ecobuild p-0 mb-5 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-ecobuild">
+          <tr>
+            <th>Label</th>
+            <th>Date</th>
+            <th class="text-end">Heating Load</th>
+            <th class="text-end">Cooling Load</th>
+            <th>Model</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in analyses %}
+          <tr>
+            <td class="fw-semibold">{{ a_labels.get(a.analysis_id, 'Analysis') }}</td>
+            <td>{{ a.created_at.strftime('%d %b %Y, %H:%M') if a.created_at else '—' }}</td>
+            <td class="text-end fw-semibold">{{ "%.2f"|format(a.predicted_heating_load) if a.predicted_heating_load is not none else '—' }}</td>
+            <td class="text-end fw-semibold">{{ "%.2f"|format(a.predicted_cooling_load) if a.predicted_cooling_load is not none else '—' }}</td>
+            <td><small class="text-muted">{{ a.model_version or '—' }}</small></td>
+            <td>
+              <a href="{{ url_for('user.analysis_detail', analysis_id=a.analysis_id) }}"
+                 class="btn btn-sm btn-outline-ecobuild">View</a>
+              <a href="{{ url_for('user.what_if', analysis_id=a.analysis_id) }}"
+                 class="btn btn-sm btn-outline-secondary ms-1">What-If</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if scenarios %}
+  <h5 class="fw-bold mb-3">What-If Scenarios ({{ scenarios|length }})</h5>
+  <div class="card-ecobuild p-0 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-ecobuild">
+          <tr>
+            <th>Label</th>
+            <th>Scenario Name</th>
+            <th>Based On</th>
+            <th>Date</th>
+            <th class="text-end">Heating Load</th>
+            <th class="text-end">Cooling Load</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in scenarios %}
+          <tr>
+            <td class="fw-semibold">{{ s_labels.get(s.scenario_id, 'Scenario') }}</td>
+            <td>{{ s.scenario_name }}</td>
+            <td>
+              {% if s.original_analysis_id %}
+                <a href="{{ url_for('user.analysis_detail', analysis_id=s.original_analysis_id) }}">
+                  {{ a_labels.get(s.original_analysis_id, 'Analysis') }}
+                </a>
+              {% else %}—{% endif %}
+            </td>
+            <td>{{ s.created_at.strftime('%d %b %Y, %H:%M') if s.created_at else '—' }}</td>
+            <td class="text-end fw-semibold">{{ "%.2f"|format(s.predicted_heating_load) if s.predicted_heating_load is not none else '—' }}</td>
+            <td class="text-end fw-semibold">{{ "%.2f"|format(s.predicted_cooling_load) if s.predicted_cooling_load is not none else '—' }}</td>
+            <td>
+              <a href="{{ url_for('user.scenario_detail', scenario_id=s.scenario_id) }}"
+                 class="btn btn-sm btn-outline-ecobuild">View</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

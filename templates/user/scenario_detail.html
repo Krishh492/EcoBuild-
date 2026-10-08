@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% block title %}Scenario: {{ scenario.scenario_name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+
+      <div class="d-flex align-items-center gap-2 mb-4">
+    <span class="fs-2" aria-hidden="true">
+        <i class="fa-solid fa-code-branch"></i>
+    </span>
+
+    <div>
+        <h2 class="fw-bold mb-0">{{ scenario.scenario_name }}</h2>
+        <small class="text-muted">
+            {{ s_labels.get(scenario.scenario_id, 'Scenario') }} &mdash;
+            {{ scenario.created_at.strftime('%d %b %Y, %H:%M') if scenario.created_at else '' }}
+        </small>
+    </div>
+</div>
+
+      <!-- Comparison cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card-ecobuild p-4 h-100" style="border-top:4px solid #6c757d;">
+            <h6 class="fw-bold text-muted text-uppercase mb-3">
+              {% if original %}{{ a_labels.get(original.analysis_id, 'Original Analysis') }}{% else %}Original Analysis{% endif %}
+            </h6>
+            <div class="d-flex justify-content-around">
+              <div class="text-center">
+                <div style="font-size:2rem;font-weight:800;color:#6c757d;">
+                  {% if original %}{{ "%.2f"|format(original.predicted_heating_load) }}{% else %}—{% endif %}
+                </div>
+                <div class="text-muted small">Heating Load</div>
+              </div>
+              <div class="text-center">
+                <div style="font-size:2rem;font-weight:800;color:#6c757d;">
+                  {% if original %}{{ "%.2f"|format(original.predicted_cooling_load) }}{% else %}—{% endif %}
+                </div>
+                <div class="text-muted small">Cooling Load</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-ecobuild p-4 h-100" style="border-top:4px solid var(--blue);">
+            <h6 class="fw-bold text-uppercase mb-3" style="color:var(--blue);">This Scenario</h6>
+            <div class="d-flex justify-content-around">
+              <div class="text-center">
+                <div style="font-size:2rem;font-weight:800;color:var(--blue);">
+                  {{ "%.2f"|format(scenario.predicted_heating_load) }}
+                </div>
+                <div class="text-muted small">Heating Load</div>
+              </div>
+              <div class="text-center">
+                <div style="font-size:2rem;font-weight:800;color:var(--blue);">
+                  {{ "%.2f"|format(scenario.predicted_cooling_load) }}
+                </div>
+                <div class="text-muted small">Cooling Load</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Differences -->
+      {% if original %}
+      {% set hl_diff = scenario.predicted_heating_load - original.predicted_heating_load %}
+      {% set cl_diff = scenario.predicted_cooling_load - original.predicted_cooling_load %}
+      <div class="card-ecobuild p-4 mb-4">
+        <h5 class="fw-bold mb-3">Change vs Original</h5>
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="d-flex justify-content-between align-items-center p-3 rounded"
+                 style="background:{% if hl_diff < 0 %}#d1e7dd{% elif hl_diff > 0 %}#f8d7da{% else %}#e7f1ff{% endif %}">
+              <span class="fw-semibold">Heating Load</span>
+              <span class="fw-bold fs-5">
+                {% if hl_diff > 0 %}+{% endif %}{{ "%.2f"|format(hl_diff) }}
+              </span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="d-flex justify-content-between align-items-center p-3 rounded"
+                 style="background:{% if cl_diff < 0 %}#d1e7dd{% elif cl_diff > 0 %}#f8d7da{% else %}#e7f1ff{% endif %}">
+              <span class="fw-semibold">Cooling Load</span>
+              <span class="fw-bold fs-5">
+                {% if cl_diff > 0 %}+{% endif %}{{ "%.2f"|format(cl_diff) }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <small class="text-muted mt-2 d-block">Green = improvement (lower load). Red = worse (higher load).</small>
+      </div>
+      {% endif %}
+
+      <!-- Parameter comparison table -->
+      <div class="card-ecobuild p-4 mb-4">
+        <h5 class="fw-bold mb-3">Parameter Comparison</h5>
+        <div class="table-responsive">
+          <table class="table table-sm mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Parameter</th>
+                <th class="text-end">Original</th>
+                <th class="text-end">Scenario</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% set params = [
+                ('Relative Compactness', original.relative_compactness if original else None, scenario.relative_compactness, ''),
+                ('Surface Area', original.surface_area if original else None, scenario.surface_area, ' m²'),
+                ('Wall Area', original.wall_area if original else None, scenario.wall_area, ' m²'),
+                ('Roof Area', original.roof_area if original else None, scenario.roof_area, ' m²'),
+                ('Overall Height', original.overall_height if original else None, scenario.overall_height, ' m'),
+                ('Orientation', original.orientation if original else None, scenario.orientation, ''),
+                ('Glazing Area', original.glazing_area if original else None, scenario.glazing_area, ''),
+                ('Glazing Area Distribution', original.glazing_area_distribution if original else None, scenario.glazing_area_distribution, ''),
+              ] %}
+              {% for label, orig_val, scen_val, unit in params %}
+              <tr {% if orig_val is not none and orig_val != scen_val %}style="background:#fff9e6"{% endif %}>
+                <td>{{ label }}</td>
+                <td class="text-end">{% if orig_val is not none %}{{ "%.2f"|format(orig_val|float) }}{{ unit }}{% else %}—{% endif %}</td>
+                <td class="text-end">{{ "%.2f"|format(scen_val|float) }}{{ unit }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <small class="text-muted mt-1 d-block">Highlighted rows show changed parameters.</small>
+        <div class="mt-2">
+          <small class="text-muted">Model: <code>{{ scenario.model_version }}</code></small>
+        </div>
+      </div>
+
+      <div class="alert alert-warning mb-4">
+        <strong>Disclaimer:</strong> Predictions are ML estimates based on the UCI ENB2012 benchmark
+        dataset and are not professional engineering certifications.
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{{ url_for('user.what_if', analysis_id=scenario.original_analysis_id) }}"
+           class="btn btn-primary-ecobuild">New Scenario</a>
+        <a href="{{ url_for('user.history') }}" class="btn btn-outline-ecobuild">History</a>
+        <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary">Dashboard</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

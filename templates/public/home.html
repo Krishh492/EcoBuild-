@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero text-center">
+  <div class="container">
+    <div class="mb-3">
+      <img src="{{ url_for('static', filename='images/logo.svg') }}"
+           alt="EcoBuild" width="72" height="72">
+    </div>
+    <h1 class="fw-bolder mb-2">EcoBuild</h1>
+    <p class="tagline fw-semibold mb-3">Design Smarter. Compare Before You Build.</p>
+    <p class="lead mx-auto">
+      EcoBuild uses machine learning to estimate building heating and cooling loads
+      and helps users compare building configurations through What-If Analysis.
+    </p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('user.analyze') }}"
+           class="btn btn-primary-ecobuild btn-lg">Analyze Building</a>
+      {% else %}
+        <a href="{{ url_for('auth.login') }}"
+           class="btn btn-primary-ecobuild btn-lg">Analyze Building</a>
+      {% endif %}
+      <a href="{{ url_for('public.how_it_works') }}"
+         class="btn btn-outline-light btn-lg">How It Works</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PROBLEM ═══════ -->
+<section class="py-5 section-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="section-title"><i class="fa-solid fa-triangle-exclamation me-2"></i>The Problem</h2>
+        <p class="text-muted section-subtitle">Energy inefficiency in buildings is a major global challenge.</p>
+        <p>
+          Buildings account for approximately <strong>40% of global energy consumption</strong>.
+          Poor early-stage design decisions — such as suboptimal compactness, surface area,
+          or glazing — lead to excessive heating and cooling demands that persist for decades.
+          Traditional energy assessment tools require specialist expertise and are often
+          inaccessible to early-stage designers and students.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SOLUTION ═══════ -->
+<section class="py-5 section-accent">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h2 class="section-title"><i class="fa-solid fa-lightbulb me-2"></i>The Solution</h2>
+        <p class="text-muted section-subtitle">Instant ML-powered energy estimates — no specialist required.</p>
+        <p>
+          EcoBuild provides an accessible, ML-based decision-support tool that instantly
+          estimates <strong>Heating Load</strong> and <strong>Cooling Load</strong> from
+          eight building parameters. Users can then run <strong>What-If Analysis</strong>
+          to compare how design modifications affect energy performance — before a single
+          brick is laid.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ HOW IT WORKS ═══════ -->
+<section class="py-5 section-light">
+  <div class="container text-center">
+    <h2 class="section-title"><i class="fa-solid fa-diagram-project me-2"></i>How EcoBuild Works</h2>
+    <p class="text-muted section-subtitle mb-4">Four steps from parameters to insights.</p>
+    <div class="d-flex flex-wrap justify-content-center align-items-center gap-2">
+      <div class="workflow-step">Enter Building Parameters</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">ML Model Predicts Loads</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Save Analysis</div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-step">Run What-If Scenarios</div>
+    </div>
+    <div class="mt-4">
+      <a href="{{ url_for('public.how_it_works') }}" class="btn btn-outline-ecobuild">
+        See Full Workflow
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ SDG 7 ═══════ -->
+<section class="py-5 section-accent">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 text-center">
+        <div class="sdg-badge d-inline-block mb-3">SDG 7 — Affordable and Clean Energy</div>
+        <p>
+          EcoBuild directly supports <strong>UN Sustainable Development Goal 7</strong>
+          by helping architects, engineers, and students make informed, energy-efficient
+          design decisions early — contributing to reduced operational energy demand
+          and a more sustainable built environment.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FEATURES ═══════ -->
+<section class="py-5 section-light">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="section-title"><i class="fa-solid fa-layer-group me-2"></i>Main Features</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card-ecobuild p-4 h-100">
+          <div class="fs-2 mb-2" aria-hidden="true"><i class="fa-solid fa-building"></i></div>
+          <h5 class="fw-bold">Building Analysis</h5>
+          <p class="text-muted mb-0">
+            Enter 8 building parameters and receive instant ML-based
+            Heating Load and Cooling Load predictions.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-ecobuild p-4 h-100">
+          <div class="fs-2 mb-2" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-chart"></i><i class="fa fa-file-text-o"></i></div>
+          <h5 class="fw-bold">What-If Analysis</h5>
+          <p class="text-muted mb-0">
+            Create named scenarios based on saved analyses and compare
+            how parameter changes affect energy loads side-by-side.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card-ecobuild p-4 h-100">
+          <div class="fs-2 mb-2" aria-hidden="true"><i class="fa-solid fa-chart-line"></i></div>
+          <h5 class="fw-bold">Analytics &amp; History</h5>
+          <p class="text-muted mb-0">
+            Review your saved analyses, track trends, and gain insight
+            into your design patterns over time.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ DATASET / ML ═══════ -->
+<section class="py-5 section-accent">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h2 class="section-title text-center"> <i class="fa-solid fa-database me-2"></i>Dataset &amp; Machine Learning</h2>
+        <p class="text-center text-muted mb-4">Built on a peer-reviewed benchmark dataset.</p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item bg-transparent">
+            <strong>Dataset:</strong> UCI Energy Efficiency dataset (ENB2012) — 768 building simulations.
+          </li>
+          <li class="list-group-item bg-transparent">
+            <strong>Model:</strong> Gradient Boosting Regressor trained separately for
+            Heating Load and Cooling Load.
+          </li>
+          <li class="list-group-item bg-transparent">
+            <strong>Heating Load — Test R²:</strong> 0.9984 &nbsp;|&nbsp;
+            <strong>MAE:</strong> 0.28 kWh/m²
+          </li>
+          <li class="list-group-item bg-transparent">
+            <strong>Cooling Load — Test R²:</strong> 0.9889 &nbsp;|&nbsp;
+            <strong>MAE:</strong> 0.69 kWh/m²
+          </li>
+          <li class="list-group-item bg-transparent">
+            <strong>Features:</strong> Relative Compactness, Surface Area, Wall Area,
+            Roof Area, Overall Height, Orientation, Glazing Area,
+            Glazing Area Distribution.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ DISCLAIMER ═══════ -->
+<section class="py-4 section-dark">
+  <div class="container text-center">
+    <p class="mb-0" style="opacity:0.8; font-size:0.9rem;">
+      <strong>Academic Prototype Disclaimer:</strong>
+      EcoBuild is an academic decision-support prototype. Predictions are estimates
+      based on benchmark data and are not professional engineering certification
+      or guaranteed real-world energy consumption.
+    </p>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-5 col-lg-4">
+
+        <div class="text-center mb-4">
+          <img src="{{ url_for('static', filename='images/logo.svg') }}"
+               alt="EcoBuild" width="52" height="52">
+          <h2 class="fw-bold mt-2">Sign In</h2>
+          <p class="text-muted">Welcome back to EcoBuild.</p>
+        </div>
+
+        <div class="form-card">
+          <form method="POST" action="{{ url_for('auth.login') }}" novalidate>
+            {{ form.hidden_tag() }}
+
+            <!-- Email -->
+            <div class="mb-3">
+              {{ form.email.label(class="form-label") }}
+              {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""),
+                            placeholder="you@example.com", autocomplete="email") }}
+              {% for err in form.email.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+              {{ form.password.label(class="form-label") }}
+              {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""),
+                               placeholder="Your password", autocomplete="current-password") }}
+              {% for err in form.password.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            {{ form.submit(class="btn btn-primary-ecobuild w-100") }}
+          </form>
+        </div>
+
+        <p class="text-center mt-3 text-muted">
+          Don't have an account?
+          <a href="{{ url_for('auth.register') }}">Register</a>
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

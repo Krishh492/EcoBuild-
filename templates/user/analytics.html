@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}My Analytics{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="fw-bold mb-1">
+        <i class="fa-solid fa-chart-area me-2"></i>My Analytics
+    </h2>
+    <p class="text-muted mb-4">
+        Charts based on your real saved analyses and scenarios.
+    </p>
+
+
+  {% if not analyses %}
+    <div class="alert alert-info">
+      You have no analyses yet.
+      <a href="{{ url_for('user.analyze') }}" class="alert-link">Run your first analysis</a>
+      to see charts here.
+    </div>
+  {% else %}
+
+  <!-- Summary cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ analyses|length }}</div>
+        <div class="stat-label">Analyses</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ scenarios|length }}</div>
+        <div class="stat-label">Scenarios</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">
+          {% if analyses %}
+            {{ "%.1f"|format(analyses | map(attribute='predicted_heating_load') | list | sum / analyses|length) }}
+          {% else %}—{% endif %}
+        </div>
+        <div class="stat-label">Avg Heating Load</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Heating & Cooling history -->
+  <div class="card-ecobuild p-4 mb-4">
+    <h5 class="fw-bold mb-3">Heating &amp; Cooling Load History</h5>
+    <canvas id="loadHistoryChart" height="100"></canvas>
+  </div>
+
+  {% if scenarios %}
+  <!-- What-If comparison -->
+  <div class="card-ecobuild p-4 mb-4">
+    <h5 class="fw-bold mb-3">What-If Comparison — Heating Load</h5>
+    <canvas id="wiHeatChart" height="100"></canvas>
+  </div>
+  <div class="card-ecobuild p-4 mb-4">
+    <h5 class="fw-bold mb-3">What-If Comparison — Cooling Load</h5>
+    <canvas id="wiCoolChart" height="100"></canvas>
+  </div>
+  {% else %}
+    <div class="alert alert-info">No What-If scenarios yet — run a scenario to see comparison charts.</div>
+  {% endif %}
+
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if analyses %}
+<script>
+const labels   = {{ analysis_labels | tojson }};
+const heating  = {{ heating_data | tojson }};
+const cooling  = {{ cooling_data | tojson }};
+
+new Chart(document.getElementById("loadHistoryChart"), {
+  type: "line",
+  data: {
+    labels: labels,
+    datasets: [
+      { label: "Heating Load", data: heating, borderColor: "#0288D1",
+        backgroundColor: "rgba(2,136,209,0.1)", tension: 0.3, fill: true },
+      { label: "Cooling Load", data: cooling, borderColor: "#0D1B2A",
+        backgroundColor: "rgba(13,27,42,0.08)", tension: 0.3, fill: true }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: "top" } },
+    scales: { y: { beginAtZero: false, title: { display: true, text: "kWh/m²" } } }
+  }
+});
+
+{% if scenarios %}
+const wiLabels  = {{ wi_labels | tojson }};
+const wiOrigHL  = {{ wi_orig_hl | tojson }};
+const wiScenHL  = {{ wi_scen_hl | tojson }};
+const wiOrigCL  = {{ wi_orig_cl | tojson }};
+const wiScenCL  = {{ wi_scen_cl | tojson }};
+
+new Chart(document.getElementById("wiHeatChart"), {
+  type: "bar",
+  data: {
+    labels: wiLabels,
+    datasets: [
+      { label: "Original Heating", data: wiOrigHL, backgroundColor: "rgba(108,117,125,0.6)" },
+      { label: "Scenario Heating", data: wiScenHL, backgroundColor: "rgba(2,136,209,0.7)" }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: "top" } },
+    scales: { y: { title: { display: true, text: "kWh/m²" } } }
+  }
+});
+
+new Chart(document.getElementById("wiCoolChart"), {
+  type: "bar",
+  data: {
+    labels: wiLabels,
+    datasets: [
+      { label: "Original Cooling", data: wiOrigCL, backgroundColor: "rgba(108,117,125,0.6)" },
+      { label: "Scenario Cooling", data: wiScenCL, backgroundColor: "rgba(13,27,42,0.6)" }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: "top" } },
+    scales: { y: { title: { display: true, text: "kWh/m²" } } }
+  }
+});
+{% endif %}
+</script>
+{% endif %}
+{% endblock %}

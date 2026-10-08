@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+{% block title %}How It Works{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <!-- Page Header -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1 class="fw-bold mb-2">How EcoBuild Works</h1>
+        <p class="text-muted mb-5">
+          From building parameters to actionable energy insights — in seconds.
+        </p>
+      </div>
+    </div>
+
+
+    <!-- Workflow Diagram -->
+    <div class="row justify-content-center mb-5">
+      <div class="col-lg-6">
+        <div class="d-flex flex-column align-items-center gap-2">
+
+          <div class="workflow-step w-100 text-center">
+            <div class="fw-bold">1 — Enter Building Parameters</div>
+            <small class="text-muted">
+              Relative Compactness, Surface Area, Wall Area, Roof Area,
+              Overall Height, Orientation, Glazing Area, Glazing Area Distribution
+            </small>
+          </div>
+
+          <div class="workflow-arrow fs-3">↓</div>
+
+          <div class="workflow-step w-100 text-center">
+            <div class="fw-bold">2 — Machine Learning Model</div>
+            <small class="text-muted">
+              GradientBoostingRegressor (trained on UCI ENB2012 dataset)
+            </small>
+          </div>
+
+          <div class="workflow-arrow fs-3">↓</div>
+
+          <div class="d-flex gap-3 w-100">
+
+            <div class="workflow-step flex-fill text-center">
+              <div class="fw-bold">Heating Load</div>
+              <small class="text-muted">
+                Predicted (kWh/m²)
+              </small>
+            </div>
+
+            <div class="workflow-step flex-fill text-center">
+              <div class="fw-bold">Cooling Load</div>
+              <small class="text-muted">
+                Predicted (kWh/m²)
+              </small>
+            </div>
+
+          </div>
+
+          <div class="workflow-arrow fs-3">↓</div>
+
+          <div class="workflow-step w-100 text-center">
+            <div class="fw-bold">3 — Save Analysis</div>
+            <small class="text-muted">
+              Results are stored against your account for future reference.
+            </small>
+          </div>
+
+          <div class="workflow-arrow fs-3">↓</div>
+
+          <div class="workflow-step w-100 text-center">
+            <div class="fw-bold">4 — What-If Analysis</div>
+            <small class="text-muted">
+              Create named scenarios by adjusting parameters and comparing loads.
+            </small>
+          </div>
+
+          <div class="workflow-arrow fs-3">↓</div>
+
+          <div class="workflow-step w-100 text-center">
+            <div class="fw-bold">5 — Compare Scenarios</div>
+            <small class="text-muted">
+              View side-by-side comparisons of heating/cooling loads across all scenarios.
+            </small>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Feature Explanations Header -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-9 text-center">
+
+        <h3 class="fw-bold mb-2">
+          Understanding the Eight Input Features
+        </h3>
+
+        <p class="text-muted mb-5">
+          These parameters describe the building configuration used by EcoBuild
+          to estimate heating and cooling loads.
+        </p>
+
+      </div>
+    </div>
+
+
+    <!-- Feature Table -->
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-11">
+
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover align-middle ecobuild-feature-table">
+
+            <thead class="table-ecobuild">
+              <tr>
+                <th scope="col">Feature</th>
+                <th scope="col">Type</th>
+                <th scope="col">Range (Training Data)</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              <tr>
+                <td>
+                  <strong>Relative Compactness</strong>
+                </td>
+                <td>Continuous</td>
+                <td>0.62 – 0.98</td>
+                <td>
+                  Indicates how compact the building shape is.
+                  Higher compactness generally means less exposed outer surface.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Surface Area</strong>
+                </td>
+                <td>Continuous</td>
+                <td>514.5 – 808.5 m²</td>
+                <td>
+                  Total external surface area of the building exposed
+                  to the surrounding environment.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Wall Area</strong>
+                </td>
+                <td>Continuous</td>
+                <td>245.0 – 416.5 m²</td>
+                <td>
+                  Total area of the building's walls separating the
+                  indoor and outdoor environment.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Roof Area</strong>
+                </td>
+                <td>Continuous</td>
+                <td>110.25 – 220.5 m²</td>
+                <td>
+                  Total roof surface area exposed to the outside environment.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Overall Height</strong>
+                </td>
+                <td>Continuous</td>
+                <td>3.5 – 7.0 m</td>
+                <td>
+                  Overall vertical height of the building structure.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Orientation</strong>
+                </td>
+                <td>Discrete</td>
+                <td>2, 3, 4, 5</td>
+                <td>
+                  Represents the building's orientation.
+                  Different orientations can affect sunlight exposure and heat gain.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Glazing Area</strong>
+                </td>
+                <td>Continuous</td>
+                <td>0.0 – 0.4 (fraction)</td>
+                <td>
+                  Proportion of the building surface occupied by windows or glass.
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <strong>Glazing Area Distribution</strong>
+                </td>
+                <td>Discrete</td>
+                <td>0, 1, 2, 3, 4, 5</td>
+                <td>
+                  Represents how the glazing or window area is distributed
+                  across the building's sides or orientations.
+                </td>
+              </tr>
+
+            </tbody>
+
+          </table>
+        </div>
+
+
+        <!-- Important Note -->
+        <div class="alert alert-info mt-4 mb-0">
+          <strong>Note:</strong>
+          Orientation and Glazing Area Distribution are categorical values
+          encoded numerically in the ENB2012 dataset. A larger number does
+          not necessarily mean a larger quantity.
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

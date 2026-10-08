@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Admin — Analytics{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="fw-bold mb-1">System Analytics</h2>
+  <p class="text-muted mb-4">Real data from the database — no synthetic values.</p>
+
+  <!-- Summary stats -->
+  <div class="row g-3 mb-5">
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ total_users }}</div>
+        <div class="stat-label">Total Users</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ total_analyses }}</div>
+        <div class="stat-label">Total Analyses</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="stat-card">
+        <div class="stat-value">{{ total_scenarios }}</div>
+        <div class="stat-label">Total Scenarios</div>
+      </div>
+    </div>
+  </div>
+
+  {% if all_analyses %}
+  <div class="row g-4 mb-4">
+    <div class="col-lg-6">
+      <div class="card-ecobuild p-4">
+        <h5 class="fw-bold mb-3">Heating &amp; Cooling Predictions (All Analyses)</h5>
+        <canvas id="sysPredChart" height="160"></canvas>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card-ecobuild p-4">
+        <h5 class="fw-bold mb-3">Analyses per User (Top 10)</h5>
+        <canvas id="userCountChart" height="160"></canvas>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="alert alert-info">No analyses recorded yet — charts will appear as users run analyses.</div>
+  {% endif %}
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if all_analyses %}
+<script>
+const sysLabels  = {{ analysis_labels | tojson }};
+const sysHeating = {{ heating_data | tojson }};
+const sysCooling = {{ cooling_data | tojson }};
+
+new Chart(document.getElementById("sysPredChart"), {
+  type: "line",
+  data: {
+    labels: sysLabels,
+    datasets: [
+      { label: "Heating Load", data: sysHeating, borderColor: "#0288D1",
+        backgroundColor: "rgba(2,136,209,0.1)", tension: 0.3, fill: true },
+      { label: "Cooling Load", data: sysCooling, borderColor: "#0D1B2A",
+        backgroundColor: "rgba(13,27,42,0.07)", tension: 0.3, fill: true }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: "top" } },
+    scales: { y: { title: { display: true, text: "kWh/m²" } } }
+  }
+});
+
+new Chart(document.getElementById("userCountChart"), {
+  type: "bar",
+  data: {
+    labels: {{ user_count_labels | tojson }},
+    datasets: [{
+      label: "Analyses",
+      data: {{ user_count_values | tojson }},
+      backgroundColor: "rgba(2,136,209,0.7)"
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: { y: { beginAtZero: true, title: { display: true, text: "Count" } } }
+  }
+});
+</script>
+{% endif %}
+{% endblock %}

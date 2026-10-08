@@ -1,0 +1,298 @@
+/* ============================================================
+   EcoBuild — main stylesheet
+   Palette: Navy #0D1B2A | Blue #0288D1 | Light Blue #E7F1FF
+   ============================================================ */
+
+:root {
+  --navy:       #0D1B2A;
+  --blue:       #0288D1;
+  --blue-dark:  #0277BD;
+  --light-blue: #E7F1FF;
+  --white:      #FFFFFF;
+  --muted:      #6c757d;
+  --border:     #dee2e6;
+  --success:    #198754;
+  --danger:     #dc3545;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #f8f9fa;
+  color: #212529;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main { flex: 1; }
+
+a { color: var(--blue); }
+a:hover { color: var(--blue-dark); }
+
+/* ── Navbar ───────────────────────────────────────────────── */
+.navbar-ecobuild {
+  background: var(--navy) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.navbar-ecobuild .navbar-brand {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: var(--white) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar-ecobuild .nav-link {
+  color: rgba(255,255,255,0.85) !important;
+  font-size: 0.92rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.navbar-ecobuild .nav-link:hover,
+.navbar-ecobuild .nav-link.active {
+  background: rgba(255,255,255,0.12);
+  color: var(--white) !important;
+}
+
+.navbar-toggler-icon { filter: invert(1); }
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+  color: var(--white);
+  padding: 5rem 0 4rem;
+}
+
+.hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; }
+.hero .tagline { font-size: 1.25rem; opacity: 0.9; }
+.hero p.lead { max-width: 620px; margin: 0 auto 2rem; opacity: 0.85; }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn-primary-ecobuild {
+  background: var(--blue);
+  border: none;
+  color: var(--white);
+  padding: 0.6rem 1.6rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.btn-primary-ecobuild:hover {
+  background: var(--blue-dark);
+  color: var(--white);
+  transform: translateY(-1px);
+}
+
+.btn-outline-ecobuild {
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  background: transparent;
+  padding: 0.55rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+
+.btn-outline-ecobuild:hover {
+  background: var(--blue);
+  color: var(--white);
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+.card-ecobuild {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  background: var(--white);
+  transition: box-shadow 0.2s;
+}
+
+.card-ecobuild:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); }
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.stat-card .stat-value {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--blue);
+}
+
+.stat-card .stat-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Sections ─────────────────────────────────────────────── */
+.section-light  { background: var(--white); }
+.section-accent { background: var(--light-blue); }
+.section-dark   { background: var(--navy); color: var(--white); }
+
+.section-title {
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+
+/* ── Workflow diagram ─────────────────────────────────────── */
+.workflow-step {
+  background: var(--white);
+  border: 2px solid var(--blue);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  color: var(--navy);
+  text-align: center;
+  min-width: 180px;
+}
+
+.workflow-arrow {
+  font-size: 1.5rem;
+  color: var(--blue);
+  font-weight: 700;
+}
+
+/* ── Forms ────────────────────────────────────────────────── */
+.form-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-label { font-weight: 500; }
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 0.2rem rgba(2,136,209,0.2);
+}
+
+/* ── Alerts ───────────────────────────────────────────────── */
+.alert { border-radius: 8px; }
+
+/* ── Footer ───────────────────────────────────────────────── */
+.footer-ecobuild {
+  background: var(--navy);
+  color: rgba(255,255,255,0.65);
+  font-size: 0.85rem;
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+.footer-ecobuild a { color: rgba(255,255,255,0.75); text-decoration: none; }
+.footer-ecobuild a:hover { color: var(--white); }
+
+/* ── Dashboard ────────────────────────────────────────────── */
+.dashboard-header {
+  background: linear-gradient(135deg, var(--navy) 0%, #1a3a5c 100%);
+  color: var(--white);
+  padding: 2.5rem 0 2rem;
+}
+
+.quick-action-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.5rem;
+  text-align: center;
+  background: var(--white);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: box-shadow 0.15s, transform 0.1s;
+}
+
+.quick-action-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  color: var(--blue);
+}
+
+.quick-action-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: var(--blue);
+}
+
+/* ── Profile ─────────────────────────────────────────────── */
+.profile-meta-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-meta-item:last-child { border-bottom: none; }
+.profile-meta-label { font-weight: 500; color: var(--muted); }
+
+/* ── Admin table ─────────────────────────────────────────── */
+.table-ecobuild thead th {
+  background: var(--navy);
+  color: var(--white);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Placeholder page ────────────────────────────────────── */
+.placeholder-banner {
+  border: 2px dashed var(--blue);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  background: var(--light-blue);
+  text-align: center;
+}
+
+/* ── Error pages ─────────────────────────────────────────── */
+.error-page {
+  text-align: center;
+  padding: 5rem 1rem;
+}
+
+.error-code {
+  font-size: 6rem;
+  font-weight: 900;
+  color: var(--blue);
+  line-height: 1;
+}
+
+/* ── SDG badge ───────────────────────────────────────────── */
+.sdg-badge {
+  background: #F9C000;
+  color: #2D2D2D;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* ── Focus states (accessibility) ───────────────────────── */
+:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+/* ── Responsive tweaks ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hero { padding: 3rem 0 2.5rem; }
+  .form-card { padding: 1.5rem; }
+  .stat-card .stat-value { font-size: 1.75rem; }
+}

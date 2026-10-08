@@ -1,0 +1,28 @@
+{
+  "heating_load": {
+    "model": "GradientBoostingRegressor",
+    "cross_validation": {
+      "cv_mae": 0.2649443369130933,
+      "cv_rmse": 0.3900659269582115,
+      "cv_r2": 0.9984607743959749
+    },
+    "test_metrics": {
+      "mae": 0.283943,
+      "rmse": 0.406943,
+      "r2": 0.998411
+    }
+  },
+  "cooling_load": {
+    "model": "GradientBoostingRegressor",
+    "cross_validation": {
+      "cv_mae": 0.6886074583361401,
+      "cv_rmse": 1.0402021797344188,
+      "cv_r2": 0.9877789762014608
+    },
+    "test_metrics": {
+      "mae": 0.685818,
+      "rmse": 1.015845,
+      "r2": 0.988863
+    }
+  }
+}

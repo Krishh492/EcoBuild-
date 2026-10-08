@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}Analyze Building{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="fs-2" aria-hidden="true"><i class="fa-solid fa-robot"></i></span>
+        <h2 class="fw-bold mb-0">Analyze Building</h2>
+      </div>
+      <p class="text-muted mb-4">
+        Enter the eight building parameters below. The ML model will predict
+        estimated Heating Load and Cooling Load values.
+      </p>
+
+      <div class="card-ecobuild p-4">
+        <form method="POST" action="{{ url_for('user.analyze') }}" novalidate
+              id="analyzeForm">
+          {{ form.hidden_tag() }}
+
+          <div class="row g-3">
+
+            <!-- Relative Compactness -->
+            <div class="col-sm-6">
+              {{ form.relative_compactness.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 0.62 – 0.98</small>
+              {{ form.relative_compactness(
+                   class="form-control" + (" is-invalid" if form.relative_compactness.errors else ""),
+                   placeholder="e.g. 0.75",
+                   step="0.01", min="0.62", max="0.98",
+                   inputmode="decimal") }}
+              {% for err in form.relative_compactness.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Surface Area -->
+            <div class="col-sm-6">
+              {{ form.surface_area.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 514.5 – 808.5</small>
+              {{ form.surface_area(
+                   class="form-control" + (" is-invalid" if form.surface_area.errors else ""),
+                   placeholder="e.g. 660",
+                   step="0.5", min="514.5", max="808.5",
+                   inputmode="decimal") }}
+              {% for err in form.surface_area.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Wall Area -->
+            <div class="col-sm-6">
+              {{ form.wall_area.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 245.0 – 416.5</small>
+              {{ form.wall_area(
+                   class="form-control" + (" is-invalid" if form.wall_area.errors else ""),
+                   placeholder="e.g. 318.5",
+                   step="0.5", min="245.0", max="416.5",
+                   inputmode="decimal") }}
+              {% for err in form.wall_area.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Roof Area -->
+            <div class="col-sm-6">
+              {{ form.roof_area.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 110.25 – 220.5</small>
+              {{ form.roof_area(
+                   class="form-control" + (" is-invalid" if form.roof_area.errors else ""),
+                   placeholder="e.g. 147.0",
+                   step="0.25", min="110.25", max="220.5",
+                   inputmode="decimal") }}
+              {% for err in form.roof_area.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Overall Height -->
+            <div class="col-sm-6">
+              {{ form.overall_height.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 3.5 – 7.0</small>
+              {{ form.overall_height(
+                   class="form-control" + (" is-invalid" if form.overall_height.errors else ""),
+                   placeholder="e.g. 5.25",
+                   step="0.25", min="3.5", max="7.0",
+                   inputmode="decimal") }}
+              {% for err in form.overall_height.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Orientation -->
+            <div class="col-sm-6">
+              {{ form.orientation.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Select cardinal direction</small>
+              {{ form.orientation(
+                   class="form-select" + (" is-invalid" if form.orientation.errors else "")) }}
+              {% for err in form.orientation.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Glazing Area -->
+            <div class="col-sm-6">
+              {{ form.glazing_area.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Range: 0.0 – 0.4 (fraction of floor area)</small>
+              {{ form.glazing_area(
+                   class="form-control" + (" is-invalid" if form.glazing_area.errors else ""),
+                   placeholder="e.g. 0.25",
+                   step="0.1", min="0.0", max="0.4",
+                   inputmode="decimal") }}
+              {% for err in form.glazing_area.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+            <!-- Glazing Area Distribution -->
+            <div class="col-sm-6">
+              {{ form.glazing_area_distribution.label(class="form-label") }}
+              <small class="text-muted d-block mb-1">Select distribution</small>
+              {{ form.glazing_area_distribution(
+                   class="form-select" + (" is-invalid" if form.glazing_area_distribution.errors else "")) }}
+              {% for err in form.glazing_area_distribution.errors %}
+                <div class="invalid-feedback">{{ err }}</div>
+              {% endfor %}
+            </div>
+
+          </div><!-- /.row -->
+
+          <div class="mt-4 d-flex gap-2">
+            {{ form.submit(class="btn btn-primary-ecobuild px-4") }}
+            <a href="{{ url_for('user.dashboard') }}"
+               class="btn btn-outline-secondary">Cancel</a>
+          </div>
+
+        </form>
+      </div><!-- /.card -->
+
+      <div class="alert alert-info mt-4 mb-0">
+        <strong>Note:</strong> Predictions are estimates based on the UCI Energy Efficiency
+        benchmark dataset and are not professional engineering certifications.
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* Basic client-side boundary hints — server always re-validates */
+document.getElementById("analyzeForm").addEventListener("submit", function(e) {
+  var ok = true;
+  this.querySelectorAll("input[type=text], input[type=number]").forEach(function(inp) {
+    var min = parseFloat(inp.min), max = parseFloat(inp.max), val = parseFloat(inp.value);
+    if (!isNaN(min) && !isNaN(max) && (isNaN(val) || val < min || val > max)) {
+      inp.classList.add("is-invalid");
+      ok = false;
+    }
+  });
+  if (!ok) e.preventDefault();
+});
+</script>
+{% endblock %}

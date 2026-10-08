@@ -1,0 +1,80 @@
+{
+  "feature_order": [
+    "Relative Compactness",
+    "Surface Area",
+    "Wall Area",
+    "Roof Area",
+    "Overall Height",
+    "Orientation",
+    "Glazing Area",
+    "Glazing Area Distribution"
+  ],
+  "features": [
+    {
+      "name": "Relative Compactness",
+      "dtype": "float64",
+      "min": 0.62,
+      "max": 0.98
+    },
+    {
+      "name": "Surface Area",
+      "dtype": "float64",
+      "min": 514.5,
+      "max": 808.5
+    },
+    {
+      "name": "Wall Area",
+      "dtype": "float64",
+      "min": 245.0,
+      "max": 416.5
+    },
+    {
+      "name": "Roof Area",
+      "dtype": "float64",
+      "min": 110.25,
+      "max": 220.5
+    },
+    {
+      "name": "Overall Height",
+      "dtype": "float64",
+      "min": 3.5,
+      "max": 7.0
+    },
+    {
+      "name": "Orientation",
+      "dtype": "int64",
+      "min": 2.0,
+      "max": 5.0,
+      "valid_values": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "Glazing Area",
+      "dtype": "float64",
+      "min": 0.0,
+      "max": 0.4
+    },
+    {
+      "name": "Glazing Area Distribution",
+      "dtype": "int64",
+      "min": 0.0,
+      "max": 5.0,
+      "valid_values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "targets": [
+    "Heating Load",
+    "Cooling Load"
+  ]
+}
