@@ -296,3 +296,62 @@ a:hover { color: var(--blue-dark); }
   .form-card { padding: 1.5rem; }
   .stat-card .stat-value { font-size: 1.75rem; }
 }
+
+/* ── EcoBuild mobile navbar improvements ── */
+@media (max-width: 991.98px) {
+  .navbar-ecobuild {
+    z-index: 1030;
+  }
+
+  .navbar-ecobuild .container {
+    flex-wrap: wrap;
+  }
+
+  .navbar-ecobuild .navbar-toggler {
+    padding: 0.5rem;
+    margin-left: auto;
+    box-shadow: none;
+  }
+
+  .navbar-ecobuild .navbar-toggler:focus {
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+  }
+
+  .navbar-ecobuild .navbar-collapse {
+    flex-basis: 100%;
+    width: 100%;
+    padding: 0.75rem 0 1rem;
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .navbar-ecobuild .navbar-nav {
+    align-items: stretch !important;
+    gap: 0.25rem;
+  }
+
+  .navbar-ecobuild .nav-link {
+    display: block;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+  }
+
+  .navbar-ecobuild .nav-item .btn {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0 0;
+    padding: 0.75rem 1rem;
+    text-align: center;
+  }
+}
+
+/* Prevent accidental horizontal overflow on small screens */
+html {
+  overflow-x: clip;
+}
+
+body {
+  min-width: 320px;
+}
