@@ -15,20 +15,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 5000);
   });
 
+
   // Manually close flash alerts using the X button.
   document.querySelectorAll(".alert .btn-close").forEach(function (button) {
     button.addEventListener("click", function () {
       const alert = button.closest(".alert");
-
-      if (!alert) return;
-
-      if (window.bootstrap) {
-        window.bootstrap.Alert.getOrCreateInstance(alert).close();
-      } else {
+      if (alert) {
         alert.remove();
       }
     });
   });
+
 
   // Mobile navbar elements.
   const navbarCollapse = document.getElementById("navbarMain");
