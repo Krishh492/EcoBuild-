@@ -1,45 +1,70 @@
+
 /* EcoBuild — main.js (vanilla JS) */
 
-// Auto-dismiss flash alerts after 5 seconds
 document.addEventListener("DOMContentLoaded", function () {
-  const alerts = document.querySelectorAll(".alert.auto-dismiss");
-  alerts.forEach(function (alert) {
+  // Auto-dismiss flash alerts after 5 seconds.
+  document.querySelectorAll(".alert.auto-dismiss").forEach(function (alert) {
     setTimeout(function () {
-      const bsAlert = bootstrap.Alert.getOrCreateInstance(alert);
-      bsAlert.close();
+      if (!alert.isConnected) return;
+
+      if (window.bootstrap) {
+        window.bootstrap.Alert.getOrCreateInstance(alert).close();
+      } else {
+        alert.remove();
+      }
     }, 5000);
   });
-});
 
-// Mobile navbar: close after selecting a navigation link.
-const navbarCollapse = document.getElementById("navbarMain");
+  // Manually close flash alerts using the X button.
+  document.querySelectorAll(".alert .btn-close").forEach(function (button) {
+    button.addEventListener("click", function () {
+      const alert = button.closest(".alert");
 
-if (navbarCollapse) {
-  navbarCollapse.querySelectorAll("a").forEach(function (link) {
-    link.addEventListener("click", function () {
-      if (
-        window.innerWidth < 992 &&
-        navbarCollapse.classList.contains("show") &&
-        window.bootstrap
-      ) {
-        bootstrap.Collapse
-          .getOrCreateInstance(navbarCollapse)
-          .hide();
+      if (!alert) return;
+
+      if (window.bootstrap) {
+        window.bootstrap.Alert.getOrCreateInstance(alert).close();
+      } else {
+        alert.remove();
       }
     });
   });
-}
 
-// Fallback if the Bootstrap JavaScript CDN fails to load.
-if (!window.bootstrap) {
+  // Mobile navbar elements.
+  const navbarCollapse = document.getElementById("navbarMain");
   const toggle = document.querySelector(
     '[data-bs-target="#navbarMain"]'
   );
 
-  if (toggle && navbarCollapse) {
-    toggle.addEventListener("click", function () {
-      const isOpen = navbarCollapse.classList.toggle("show");
-      toggle.setAttribute("aria-expanded", String(isOpen));
+  if (navbarCollapse) {
+    // Close the mobile menu after clicking a navigation link.
+    navbarCollapse.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        if (
+          window.innerWidth < 992 &&
+          navbarCollapse.classList.contains("show")
+        ) {
+          if (window.bootstrap) {
+            window.bootstrap.Collapse
+              .getOrCreateInstance(navbarCollapse)
+              .hide();
+          } else {
+            navbarCollapse.classList.remove("show");
+
+            if (toggle) {
+              toggle.setAttribute("aria-expanded", "false");
+            }
+          }
+        }
+      });
     });
+
+    // Fallback if Bootstrap JavaScript fails to load.
+    if (!window.bootstrap && toggle) {
+      toggle.addEventListener("click", function () {
+        const isOpen = navbarCollapse.classList.toggle("show");
+        toggle.setAttribute("aria-expanded", String(isOpen));
+      });
+    }
   }
-}
+});
