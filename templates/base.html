@@ -49,10 +49,6 @@
         {% if current_user.is_authenticated and current_user.is_admin %}
           <!-- ── ADMIN nav ── -->
           <li class="nav-item">
-            <a class="nav-link {% if request.endpoint == 'public.home' %}active{% endif %}"
-               href="{{ url_for('public.home') }}">Home</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}"
                href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
           </li>
